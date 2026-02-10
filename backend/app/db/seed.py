@@ -1,5 +1,5 @@
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -15,6 +15,9 @@ from app.core.security import hash_password
 def seed():
     try:
         with get_db_session() as db:
+
+            now = datetime.now(timezone.utc)
+
             db.query(Interview).delete()
             db.query(UserPermission).delete()
             db.query(Candidate).delete()
@@ -25,13 +28,15 @@ def seed():
             admin = User(
                 email="admin@example.com",
                 password_hash=hash_password("Admin@1234"),
-                role="admin"
+                role="admin",
+                created_at=now
             )
 
             user = User(
                 email="user@example.com",
                 password_hash=hash_password("User@1234"),
-                role="user"
+                role="user",
+                created_at=now
             )
 
             db.add_all([admin, user])
@@ -86,7 +91,8 @@ def seed():
                         full_name=f"Candidate {i}",
                         email=f"candidate{i}@example.com",
                         phone=f"90000000{i:02d}",
-                        city=random.choice(cities)
+                        city=random.choice(cities),
+                        created_at=now
                     )
                 )
 
@@ -96,7 +102,8 @@ def seed():
                     Interviewer(
                         full_name=f"Interviewer {i}",
                         email=f"interviewer{i}@example.com",
-                        department=random.choice(["Engineering", "HR", "Product"])
+                        department=random.choice(["Engineering", "HR", "Product"]),
+                        created_at=now
                     )
                 )
 
@@ -105,7 +112,6 @@ def seed():
             db.flush()
 
             interviews = []
-            now = datetime.utcnow()
 
             for _ in range(30):
                 interviews.append(
@@ -113,7 +119,8 @@ def seed():
                         candidate_id=random.choice(candidates).id,
                         interviewer_id=random.choice(interviewers).id,
                         scheduled_at=now + timedelta(days=random.randint(-10, 10)),
-                        status=random.choice(["scheduled", "completed", "cancelled"])
+                        status=random.choice(["scheduled", "completed", "cancelled"]),
+                        created_at=now
                     )
                 )
 
