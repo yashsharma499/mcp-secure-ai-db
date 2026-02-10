@@ -1,0 +1,36 @@
+# ---------- Node ----------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+
+# ---------- Frontend env ----------
+frontend/.env
+frontend/.env.*
+
+# ---------- Python ----------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ---------- Backend / Agent env ----------
+backend/.env
+backend/.env.*
+agent/.env
+agent/.env.*
+
+# ---------- OS / Editor ----------
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+agent/memory_store.json
